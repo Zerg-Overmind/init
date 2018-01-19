@@ -1,1 +1,2 @@
-2333333333
+overmind的第一次提交
+  之前的网络无法链接问题被解决，即在ubuntu下无法识别网卡和有限网，原因是windows和linux双系统对网卡的设置冲突，解决方法是，到windows下，从此计算机那里点击“管理”，右键网卡，将wake on magic package选项选择disable，这样再打开ubuntu就能链接有限网啦，链接校园网的话，下载那个客户端软件，然后在ubuntu内解压，先在文件夹路径下终端打开，最高权限运行privilege.sh，再点击客户端可执行文件，记得还要手动设置ipv4和DNS。
