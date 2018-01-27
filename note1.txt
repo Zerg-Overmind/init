@@ -1,0 +1,48 @@
+2018/1/26 《Git教程》笔记
+1.所有的版本控制系统，只能跟踪文本文件的改动。
+
+2.文本都有编码，中文常用的GBK编码，日文有Shift_JIS编码，为了所有语言使用同一种编码，
+没有冲突又被所有平台所支持，建议使用标准的UTF-8编码。
+
+3.使用git status命令可以随时掌握工作区状态，了解文件被修改与否，用git diff可以查看修改内容。
+
+4.git log中出现的“3628164...882e1e0”是commit id（版本号），和SVN不一样，Git的commit id（版本号），和SVN不一样，
+Git的commit不是1,2,3...递增的数字，而是一个SHA1计算出来的非常大的数字，用十六进制表示。
+
+5.Git中，HEAD表示当前版本，也就是最新的提交，上一个版本就是HEAD^，上上一个版本就是HEAD^^。
+往上100个版本就是HEAD~100.使用git reset --hard commit_id命令：
+$git reset --hard HEAD^
+HEAD is now at ea34578 add distributed（当初自己写的注释）
+再用$cat read.txt就可以查看这个版本的内容了。
+那若要再回到最新版本，则要保证之前的窗口没有关闭，这样就可以找到回退之前的最新版本id（也不用写全，写出几位就可以了）：
+$git reset --hard 3628164
+HEAD is now at 3628164 +（当时的注释）
+HEAD是指向当前版本的指针
+
+6.git reflog可以记录每一次命令
+
+7.Git和其他版本控制系统如SVN的一个不同在于有暂存区的概念
+工作区（Working Directory）：本地电脑里可以看到的目录
+版本库（repository）：工作区有一个隐藏目录“.git”
+Git版本库中存了很多东西，最重要的是stage（index）的暂存区，还有自动创建的第一个分支master，以及指向master
+的一个指针叫HEAD。
+
+8.$git checkout --file表示丢弃工作区的修改，没有“--”就表示创建一个分支命令。
+
+9.git reset HEAD file 表示把暂存区的修该撤掉（unstage），重新放回工作区，也就是说git reset既可以回退版本也可以把暂存区
+修改退回到工作区
+
+
+2018/1/27
+1.当工作区删除了文件，Git会发现工作区和版本库的不同，git status会显示其中的不同，
+此时有两种选择，一是确实要删除文件，用git rm然后commit，而是误删除，那么可以从版本库中恢复
+文件:$git checkout --test.txt
+2.本地Git仓库和GitHub仓库之间是通过SSH加密的，所以要创建SSH Key。
+3.，GitHub给出的地址不⽌止⼀一个，还可以用https://github.com/ michaelliao/gitskills.git这样的地址。
+实际上，Git支持多种协议，默认的git://使用ssh，但 也可以使⽤用https等其他协议。 
+Git支持多种协议，包括https，但通过ssh⽀支持的原生git协议速度快
+
+4.版本库远端改动后，要更新本地才可以继续推送或上传文件代码，可用以下方法：
+$git fetch origin master
+$git log -p master..origin/master
+$git merge origin/master
