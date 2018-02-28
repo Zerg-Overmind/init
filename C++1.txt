@@ -121,3 +121,31 @@ while （true）{
 6.const double PI=3.1415926；
 在C++中，像这样定义的常量在源文件中是私有的常量，不能从接口中导出。为了可以导出，需要在其接口的常量定义声明和原型
 声明中都加上关键字extern。
+
+2018/2/27
+1.关于string类，若使用输入输出流，可发现：
+int main（）{
+   string name；
+   cout << "Enter your name: ";
+   cin >> name;
+   cout << "Hello, " << name << "!" << endl;
+   return 0;
+}
+  当输入全名如Eric Roberts时，输出会是 Hello， Eric！
+  而姓氏会不见，事实上这和>>操作符的字符串读取规则有关，一旦>>操作符遇到空白字符（whitespace character）就会停止读取，
+此处空白字符定义为会在屏幕上显示空白间隔的字符，常见空白字符包括空格，制表符和行末标识符。
+  若我们想读取一个包含空白字符的字符串，最标准的方法是用getline（cin， str），该函数从控制台读取一整行字符串并放到
+str中，其中str是通过引用传递的。所以修缮后代码如下：
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main(){
+   string name;
+   cout << "Enter your name: ";
+   getline(cin, name);
+   cout << "Hello, " << name << "!" << endl;
+   return 0;
+}
+
+
