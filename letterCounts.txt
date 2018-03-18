@@ -1,0 +1,39 @@
+#include <iostream>
+#include <iomanip>
+#include <cctype>
+#include <fstream>
+#include "filelib.h"
+#include "vector.h"
+using namespace std;
+
+static const int COLUMNS =7;
+
+string promptUserForFile(ifstream & infile, string prompt = "");
+
+int main(){
+   Vector<int> letterCounts(26);  //初始化26个元素为0
+   ifstream infile;
+   promptUserForFile(infile, "Input file: ");
+   char ch;
+   while (infile.get(ch)){
+      if (isalpha(ch)){
+	     letterCounts[toupper(ch) - 'A']++;
+	  }
+   }
+   infile.close();
+   for (char ch = "A"; ch <= 'Z'; ch++){
+      cout<<setw(COLUMNS)<<letterCounts[ch - 'A']<<" "<<ch<<endl;
+   }
+   return 0;
+}
+string promptUserForFile(ifstream & infile, string prompt) {
+	while (1) {
+		cout << prompt;
+		string filename;
+		getline(cin, filename);
+		infile.open(filename.c_str());
+		if (!infile.fail()) return filename;
+		infile.clear();
+		cout << "Unable to open the file. Try again." << endl;
+		if (prompt == "") prompt = "Input file: ";
+	}
