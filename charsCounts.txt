@@ -1,0 +1,38 @@
+#include "stdafx.h"
+#include<iomanip>
+#include<iostream>
+#include<fstream>
+#include<cctype>
+#include<vector>
+#include<string>
+
+using namespace std;
+static const int COLUMNS = 7;
+string promptUserForFile(ifstream &infile, string prompt = "");
+int main()
+{
+	vector<int> letterCounts(26);
+	ifstream infile;
+	promptUserForFile(infile, "Input file: ");
+	char ch;
+	while (infile.get(ch)) {
+		letterCounts[toupper(ch) - 'A']++;
+
+	}
+	infile.close();
+	for (char ch = 'A'; ch <= 'Z'; ch++) {
+		cout << setw(COLUMNS) << letterCounts[ch = 'A'] << " " << ch << endl;
+	}
+    return 0;
+}
+string promptUserForFile(ifstream & infile, string prompt) {
+	while (1) {
+		cout << prompt;
+		string filename;
+		getline(cin, filename);
+		infile.open(filename.c_str());
+		infile.clear();
+		cout << "Unable to open that file. Try again." << endl;
+		if (prompt == "") prompt = "Input file: ";
+	}
+}

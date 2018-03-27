@@ -211,3 +211,68 @@ void removeZeroElements(Vector<int> & vec){
 }
 这段代码的亮点在于为了确保删除的元素不会改变待检查元素的位置，该for循环是从vec的最后一个元素开始的，然后反向检查并操作
 元素。
+
+4.关于vector，现在需要注意以下几点：
+1）在最新版（现行版）C++中，vec.size()被认为是unsigned int类型，也就是无符号整形，所以在编译运行时会报错，
+   错误类型是warning C4018: “<”: 有符号/无符号不匹配，所以要将i的类型改为unsigned int才可以。
+2）在Vector<string> vector之后，不能直接通过
+vector[0] = "aa"
+vector[1] = "bb"等进行赋值，这样会导致越界。一种办法，那就是Vector<string> vector之后，进行调用vector的push_back("aa")
+方法向vector中添加数据，该方法会自动申请内存，这样vector的size就可以逐步增加，不会越界。
+
+5.关于迭代器，它是一个广义指针，通过广义化为迭代器，让STL能够成为各种不同的容器类（包括那些简单指针无法处理的类）提供统
+一的接口。每个容器类都定义了一个合适的迭代器，该迭代器类型是一个名为iterator的typedef，作用域为整个类。
+例如，要为vector的double类型规范声明一个迭代器，可以这样做：
+vector<double>::iterator pd;
+则可以用迭代器pd执行如下操作：
+pd=scores.begin();  //have pd point to the first element
+*pd=22.3;           //dereference pd and assign value to first element
+++pd;               //make pd point to the next element
+还有一个C++11自动类型很有用的地方，如下：
+vector<double>::iterator pd=scrores.begin();  替代为 auto pd=scores.begin();
+那么用迭代器遍历容器内容可以如下：
+for(pd = scores.begin();pd != scores.end(); pd++)
+cout<<*pd<<endl;;
+再加一例可以手动添加数字给矢量的方式：
+vector<double> scores;
+double temp;
+while(cin>>temp && temp >= 0)
+scores.push_back(temp);
+cout<<"You entered "<<scores.size()<<" scores.\n";
+
+6.erase（）方法删除矢量中给定区间元素，接受两个迭代器参数，第一个指向区间起始处，第二个位于区间终止出的后一个位置。
+如：scores.erase(scores.begin(), scores.begin()+2);
+
+7.一种避免显式使用迭代器变量的方法是用for_each()函数代替for循环。
+vector<Review>::iterator pr;
+for(pr=books.begin();pr!=books.end();pr++)
+   ShowReview(*pr);
+替换为for_each(books.begin(),books.end(),ShowReview);
+
+8.Random_shuffle()函数接受两个指定区间的迭代器参数，并随机排列该区间中的元素：
+random_shuffle(books.begin(),books.end());
+与可用于任何容器类的for_each()不同，该函数要求容器类允许随机访问，vector类满足。
+
+2018/3/27
+1.关于迭代的效率问题，用斐波那契数列来说明举例：
+一种直接想到的递归是：
+int fib(int n){
+   if(n<2){
+      return n;
+   }else{
+      return fib(n-1)+fib(n-2);
+   }
+}
+但是当展开其调用过程，会发现它是一个2的指数型分解，效率很低下，所以我们可以换一种方式：
+int additiveSequence(int n, int t0, int t1){
+   if(n==0) return t0;
+   if(n==1) return t1;
+   return additiveSequence(n-1, t1, t0+t1);
+}
+如果跟踪这个函数的实现细节，则会发现这些步骤不会产生冗余计算：
+fib(5)=additiveSequence(5,0,1)
+      =additiveSequence(4,1,1)
+	  =additiveSequence(3,1,2)
+	  =additiveSequence(2,2,3)
+	  =additiveSequence(1,3,5)
+	  =5

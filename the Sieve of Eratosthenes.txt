@@ -1,0 +1,42 @@
+//这个程序仿真了埃拉托色尼斯筛法
+#include "stdafx.h"
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main()
+{
+	vector <int> numset;
+	vector<int> collector;
+	//for (int i = 2; i < 101; i++) {
+	//	numset.push_back(i);
+	//}     生成指定的2到1000的自然数赋值给numset
+	int temp;
+	while (cin >> temp && temp >= 0) {
+		numset.push_back(temp);
+		cout << "You entered: " << numset.size() << " number.\n";
+	}    //手工给numset这一个vector类型赋值，将输入给入vector，输入负数结束输入
+
+
+	for (unsigned k = 0; k < numset.size(); k++) {
+		int m =0;
+		for (int i = 2; i <= numset[k]; i++) {
+			if (numset[k] % i == 0)  m++;   //m代表numset[k]的非1因子的个数，现在遍历小于numset[k]的自然数来找因子
+		}
+		if (m == 1) {                       //m=1代表numset[k]是素数(因子只有它本身)
+			for (unsigned n = 0; n < numset.size(); n++) {
+				if (numset[n]>numset[k]) {
+					if ((numset[n] % numset[k]) == 0) {
+						numset.erase(numset.begin() + n );
+					}
+
+				}
+			}
+		}
+	}
+
+	for (unsigned p = 0; p < numset.size(); p++) {   //将删除之后的vector输出
+		cout << numset[p] << endl;
+	}
+    return 0;
+}
